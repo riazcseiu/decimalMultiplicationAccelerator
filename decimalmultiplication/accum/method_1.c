@@ -308,7 +308,7 @@ for (int shiuly =0 ; shiuly <2; shiuly++)
 
 X_64=X_64+0; Y_64=Y_64+0;
 	
-//	printf("resutl should 97 %d, %ld\n" ,mohon1,BCDresult1);
+//	printf("resutl should 97 RRR %d, %ld\n" ,mohon1,BCDresult1);
 }
 
  
