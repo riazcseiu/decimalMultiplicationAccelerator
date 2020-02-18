@@ -15,4 +15,10 @@ int main()
   }
   printf ("mem_total_hw = %d\n", mem_total_hw);
   printf ("mem_total_sw = %d\n", mem_total_sw);
+
+  //uplpding multiplicand multiple
+
+
+
+
 }
