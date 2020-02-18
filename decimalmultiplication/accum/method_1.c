@@ -1,3 +1,4 @@
+//NAIST Dependable System Lab
 #include "rocc_charcunt.h"
 #include<stdio.h>
 
@@ -9,13 +10,10 @@
 
 
 unsigned long read_cycles(void)
-
-{
-
-unsigned long cycles;
-
-asm volatile ("rdcycle %0" : "=r" (cycles));
-return cycles;
+ {
+   unsigned long cycles;
+   asm volatile ("rdcycle %0" : "=r" (cycles));
+   return cycles;
 
 }
 
