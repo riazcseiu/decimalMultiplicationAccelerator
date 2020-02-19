@@ -157,6 +157,42 @@ static decFloat * decCanonical(decFloat *result, const decFloat *df) {
   return result;
   } // decCanonical
 
+
+
+
+
+
+
+
+
+
+
+
+
+//unsigned long read_cycles(void)
+//        {
+//             unsigned long cycles;
+//             asm volatile ("rdcycle %0" : "=r" (cycles));
+//             return cycles;
+//        }
+
+
+
+static inline unsigned long accum_DPD_BCD( unsigned long data, unsigned long data1)
+        {
+        printf("DPDBCD_r");
+        unsigned long result;
+        asm volatile ("fence");
+        ROCC_INSTRUCTION_DSS(0,result, data1, data, 8); //bpd-bdc (doBCD) is assign as function 6
+        return result;
+
+        }
+
+
+
+
+
+
 /* ------------------------------------------------------------------ */
 /* decDivide -- divide operations                                     */
 /*                                                                    */
@@ -1145,7 +1181,7 @@ static void decFiniteMultiply(bcdnum *num, uByte *bcdacc,
 ////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 //to test method 4 we need to modify original function 	decFiniteMultiply	 
-	  int methodnumber =1;        //4 = Method-1 : BCD conversion Method-1
+	  int methodnumber =4;        //4 = Method-1 : BCD conversion Method-1
                                    //1 = Method-2 calculating 1X-9X in base billion
                                    //5 = Method-3 
 							      //2 = using base thousand addition New Method
@@ -1280,8 +1316,8 @@ static void decFiniteMultiply(bcdnum *num, uByte *bcdacc,
 			{
 
 
-			  uInt sourhi, sourlo;                             \
-              sourlo = DFWORD(dfl, 1);                          \
+			  uInt sourhi, sourlo;     \
+       sourlo = DFWORD(dfl, 1);                          \
               (bufl)[0] = DPD2BCD8[sourlo & 0x3ff]              \
               + DPD2BCD8[(sourlo >> 10) & 0x3ff]                \
               + DPD2BCD8[(sourlo >> 20) & 0x3ff];               \
@@ -1301,18 +1337,23 @@ static void decFiniteMultiply(bcdnum *num, uByte *bcdacc,
               + DPD2BCD8[DECCOMBMSD[sourhi >> 26]];
 	      //Comparison among methods with various input ( Platform windows and 64-bit)
 
-        for (int mm=0; mm<8; mm++)
-       {
-      int a=4+4;
-    
-       } 
-        for (int pp=0;pp<15;pp++)
-     { int a=3+3;
+/*        
+for (int mm=0; mm<8; mm++)
+         {
+           int a=4+4;
+         } 
+       for (int pp=0;pp<15;pp++)
+        { 
+	int a=3+3;
+        }
+
+*/
+       unsigned long M1Result = accum_DPD_BCD(sourhi,  soullo);
      
-  }
 
 
-     }
+
+}
         break;
         case 5:
 
@@ -1341,10 +1382,12 @@ static void decFiniteMultiply(bcdnum *num, uByte *bcdacc,
 	      //Comparison among methods with various input ( Platform windows and 64-bit)
 
         for (int mm=0; mm<8; mm++)
-       {
-      int a=4+4;
+        {
+        int a=4+4;
     
        } 
+
+        
 
 
 }
