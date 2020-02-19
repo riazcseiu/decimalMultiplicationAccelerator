@@ -1,8 +1,8 @@
 # decimalMultiplicationAccelerator
 ## Start
-configure https://github.com/riazcseiu/rocket-chip
-configure RISC-V Tools repo
-  cd decmul/
+  configure https://github.com/riazcseiu/rocket-chip
+  configure RISC-V Tools repo
+   cd decmul/
 
 
 
