@@ -1181,7 +1181,7 @@ static void decFiniteMultiply(bcdnum *num, uByte *bcdacc,
 ////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 //to test method 4 we need to modify original function 	decFiniteMultiply	 
-	  int methodnumber =4;        //4 = Method-1 : BCD conversion Method-1
+	  int methodnumber =5;        //4 = Method-1 : BCD conversion Method-1
                                    //1 = Method-2 calculating 1X-9X in base billion
                                    //5 = Method-3 
 							      //2 = using base thousand addition New Method
@@ -1348,7 +1348,7 @@ for (int mm=0; mm<8; mm++)
         }
 
 */
-       unsigned long M1Result = accum_DPD_BCD(sourhi,  soullo);
+      // unsigned long M1Result = accum_DPD_BCD(sourhi,  soullo);
      
 
 
@@ -1381,11 +1381,11 @@ for (int mm=0; mm<8; mm++)
               + DPD2BCD8[DECCOMBMSD[sourhi >> 26]];
 	      //Comparison among methods with various input ( Platform windows and 64-bit)
 
-        for (int mm=0; mm<8; mm++)
-        {
-        int a=4+4;
+       // for (int mm=0; mm<8; mm++)
+       // {
+       // int a=4+4;
     
-       } 
+      // } 
 
         
 
@@ -3179,10 +3179,10 @@ decFloat * decFloatMultiply(decFloat *result,
   
 
   //only form test of method-4 , in that case decFinalize(result, &num, set); must need to comment out
-  return decInfinity(result, result);
+ // return decInfinity(result, result);
   
 
-  //return decFinalize(result, &num, set); // round, check, and lay out
+  return decFinalize(result, &num, set); // round, check, and lay out
 
 
 

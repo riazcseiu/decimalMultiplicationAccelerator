@@ -35,8 +35,13 @@ int main() {
 		cycleend_bcd,
 		method1_start,
 		method1_end,
-        	method3_start,
-		method3_end; // declare for clock testa
+		method2_start,
+		method2_end,
+		method3_start,
+		method3_end,
+		method4_start,
+		method4_end;
+; // declare for clock testa
   
   //verify Accelerator operation write
   printf("[INFO] Write R[%d] = 0x%lx\n", addr, data[0]);
@@ -93,7 +98,7 @@ int main() {
         // 0b0011100110000011100001000100001110000100100010010001000100010111;
 	//0b0011000001001001001101001000001100001000000001100101011101110000;
 
-  for (int serial = 0; serial<9; serial ++)
+  for (int serial = 0; serial<2; serial ++)
 	{	
 		printf("[INFO] Accum BCD R[%d] with 0x%lx\n", X,Y);
 		cyclestart_bcd = read_cycles();
@@ -129,7 +134,7 @@ int main() {
 		MID(Y_64,ii,ii+4));
 	}
 
-  for (int any = 1; any<20; any++)
+  for (int method_1 = 1; method_1<5; method_1++)
 	{
   		method1_start = read_cycles();
 		unsigned long long MM[10];
@@ -153,21 +158,16 @@ int main() {
 
   	}// mehtod 1 end 
  
-/*
-	for (int mmp = 0; mmp<10 ; mmp++)
-		 printf(" Multiplicand multiple MM[%u] %ld \n",mmp, MM[mmp]);
-
-printf(" Xconv= %ld X_64=%ld Y_64=%ld ",X_32,Y_64,X_64);
-
-
-
-for (int ii=0; ii <64 ; ii=ii+4)
-{
-	printf("initial porduct is  and the digit is%x \n", MID(Y_64,ii,ii+4));
-
-}
-printf(" Xconv= %ld X_64=%ld Y_64=%ld ",X_32,Y_64,X_64);
-*/
+  /* // verify data for tesintg print
+  for (int mmp = 0; mmp<10 ; mmp++)
+  	printf(" Multiplicand multiple MM[%u] %ld \n",mmp, MM[mmp]);
+	printf(" Xconv= %ld X_64=%ld Y_64=%ld ",X_32,Y_64,X_64);
+  for (int ii=0; ii <64 ; ii=ii+4)
+	{
+		printf("initial porduct is  and the digit is%x \n", MID(Y_64,ii,ii+4));
+	}
+  printf(" Xconv= %ld X_64=%ld Y_64=%ld ",X_32,Y_64,X_64);
+  */
 		
 
  
@@ -175,7 +175,7 @@ printf(" Xconv= %ld X_64=%ld Y_64=%ld ",X_32,Y_64,X_64);
  //generation of multiplicand multiple 
 
 
-  for (int method_3 = 1; method_3<20; method_3++)
+  for (int method_3 = 1; method_3<5; method_3++)
 	{
   		method3_start = read_cycles();
 		unsigned long long MM[10];
@@ -186,13 +186,64 @@ printf(" Xconv= %ld X_64=%ld Y_64=%ld ",X_32,Y_64,X_64);
 		__uint128_t product=0;
                 
                 // sending all multiplicand multiple and getting product
-                doAccum  (product,MM, 10);
-  	        method3_end = read_cycles();
-		printf("Took %lu cycles to X=%ld, Y=%ld, Method-3  \n",method1_end - method1_start ,X_64,Y_64);
+                doAccummul  (product,MM, 10);
+	        method3_end = read_cycles();
+		printf("Took %lu cycles to X=%ld, Y=%ld, Method-3  \n",method3_end - method3_start ,X_64,Y_64);
 
-  	}// 
+  	}// method-3 end 
+
  
 
+ //method 2 start
+ //generation of multiplicand multiple 
+
+
+  for (int method_2 = 1; method_2<5; method_2++)
+        {
+                method2_start = read_cycles();
+                unsigned long long MM[10];
+                MM[0]= 0b000000000000000000000000000000000000000000000000000000000000000;
+                MM[1]= X_64;
+                MM[2]= X_64;
+		MM[3]= X_64;
+ 		MM[4]= X_64;
+ 		MM[5]= X_64;
+ 		MM[6]= X_64;
+		MM[7]= X_64;
+ 		MM[8]= X_64;
+ 		MM[9]= X_64;
+
+		 __uint128_t product=0;
+
+                // sending all multiplicand multiple and getting product
+                doAccummul  (product,MM, 10);
+                method2_end = read_cycles();
+                printf("Took %lu cycles to X=%ld, Y=%ld, Method-2  \n",method2_end - method2_start ,X_64,Y_64);
+
+        }// 
+
+
+
+
+
+ //method 4 start
+ //generation of multiplicand multiple 
+
+
+  for (int method_4 = 1; method_4<5; method_4++)
+        {
+
+
+                 unsigned long result =0;
+                // sending data for conversion
+
+                method4_start = read_cycles();
+                 
+                doConvert(result,X_32,0);
+                method4_end = read_cycles();
+                printf("Took %lu cycles to X=%ld, Y=%ld, Method-4  \n",method4_end - method4_start ,X_64,Y_64);
+
+        }// 
 
 
 
