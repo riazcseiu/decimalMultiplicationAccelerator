@@ -10,6 +10,8 @@
 
 
 #define memmul(y, mem_addr, len)                          \
-  ROCC_INSTRUCTION(XCUSTOM_MEMTOTAL, y, mem_addr, len, 0);
+  ROCC_INSTRUCTION(XCUSTOM_MEMTOTAL, y, mem_addr, len, 1);
 
 #endif // SORC_ROCC_MEMTOTAL_H
+
+

@@ -1,3 +1,4 @@
+//NAIST Dependable System Lab
 #include "rocc_charcunt.h"
 #include<stdio.h>
 
@@ -9,13 +10,10 @@
 
 
 unsigned long read_cycles(void)
-
-{
-
-unsigned long cycles;
-
-asm volatile ("rdcycle %0" : "=r" (cycles));
-return cycles;
+ {
+   unsigned long cycles;
+   asm volatile ("rdcycle %0" : "=r" (cycles));
+   return cycles;
 
 }
 
@@ -185,7 +183,7 @@ printf("   %2hhu - %2hhu  value : %u (deg. F)\n", 60, 63, mul.D16);
 
 
 
-for (int mega =0; mega <2; mega++)
+for (int mega =0; mega <19; mega++)
 {
 printf("single cycle test start\n");
 unsigned long bcdadd,bcdconv,bcdmul;
@@ -220,7 +218,7 @@ unsigned long long MM[10];
 
 	for (int mmp = 0; mmp<10 ; mmp++)
 		 printf(" Multiplicand multiple MM[%u] %ld \n",mmp, MM[mmp]);
-
+unsigned long result;
 printf(" Xconv= %ld X_64=%ld Y_64=%ld ",X_32,Y_64,X_64);
 
 
@@ -308,7 +306,7 @@ for (int shiuly =0 ; shiuly <2; shiuly++)
 
 X_64=X_64+0; Y_64=Y_64+0;
 	
-//	printf("resutl should 97 %d, %ld\n" ,mohon1,BCDresult1);
+//	printf("resutl should 97 RRR %d, %ld\n" ,mohon1,BCDresult1);
 }
 
  
