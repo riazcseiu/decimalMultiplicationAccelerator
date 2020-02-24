@@ -243,7 +243,7 @@ int main()
          BCD_cycleend = read_cycles();
  	// printf("Took %lu cycles to BCD add %lu result \n", BCD_cycleend - BCD_cyclestart, BCDresult);
 	//-------------------------------	
-			
+		a	
 			
 	clock_t begin_decimal = 0; //initialize time
 	clock_t end_decimal = 0;
