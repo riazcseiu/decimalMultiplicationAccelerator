@@ -146,7 +146,14 @@
   extern uint32_t      decDoubleRadix(const decDouble *);
   extern uint32_t      decDoubleSameQuantum(const decDouble *, const decDouble *);
   extern const char *  decDoubleVersion(void);
+/*
+  extern unsigned long hw_method1_start, 
+                       hw_method1_end;
 
+
+   extern unsigned long total_cycle_hw_method;
+/*
+ 
   /* decNumber conversions; these are implemented as macros so as not  */
   /* to force a dependency on decimal64 and decNumber in decDouble.    */
   /* decDoubleFromNumber returns a decimal64 * to avoid warnings.      */

@@ -13,7 +13,7 @@
 #include <string.h>
 
 
-
+//mytop
 
 
 //MACRO for selecting BCD digit
@@ -25,12 +25,12 @@
 unsigned long read_cycles(void)
 	{
 		unsigned long cycles;
-		asm volatile ("rdcycle %0" : "=r" (cycles));
+                asm volatile ("fence");
+                asm volatile ("rdcycle %0" : "=r" (cycles));
 		return cycles;
 
 	}
-
-
+               
 
 int main() {
 
@@ -16085,7 +16085,7 @@ strncpy (multiplaier[7999],"-5571575643265909E-99", strlen("-5571575643265909E-9
 	*/
 
 	//This process calculate two decimal multiplication in binary
-	for (int c1 = 0 ; c1<8000;c1++) //input loop changing input
+	for (int c1 = 0 ; c1<8;c1++) //input loop changing input
                 {
 
                         //int i = 0;
@@ -16093,7 +16093,7 @@ strncpy (multiplaier[7999],"-5571575643265909E-99", strlen("-5571575643265909E-9
                         decDoubleFromString(&b, multiplaier[c1], &set);
                         temp1 = a; temp2 = b;
                        // begin_decimal = clock();
-                        for(int m=0;m<1;m++) //doing the same operation repet
+                        for(int m=0;m<8;m++) //doing the same operation repet
                                 {
                                         a = temp1; b = temp2;
                                         cyclestart_binary = read_cycles();
@@ -16143,14 +16143,14 @@ strncpy (multiplaier[7999],"-5571575643265909E-99", strlen("-5571575643265909E-9
                         temp1 = c; temp2 = d;
                        // begin_modify = clock();
                         for (int m = 0; m<1; m++) //doing the same operation repet
-                                {
+                                {       total_cycle_hw_method = 0;
                                         c = temp1; d = temp2;
                                         cyclestart_modify = read_cycles();
                                         MdecDoubleMultiply(&c, &c, &d, &set);    // a=aXb
                                         cycleend_modify = read_cycles();
                                         //printf("Took %lu cycles (COMB) \n", cycleend_modify -cyclestart_modify);
 					total_cycle_method[c2]= cycleend_modify -  cyclestart_modify ;
-                                        printf("%d,%lu \n" , c2,total_cycle_method[c2]);
+                                        printf("%d ,%lu , %lu\n" ,c2,total_cycle_method[c2],total_cycle_hw_method);
 
                                 }
                          // end_modify = clock();
@@ -16344,7 +16344,7 @@ strncpy (multiplaier[7999],"-5571575643265909E-99", strlen("-5571575643265909E-9
 		
 
  
- //method 3 start
+ //method 3(previous) New Mehotd-2
  //generation of multiplicand multiple 
 
 
@@ -16361,20 +16361,19 @@ strncpy (multiplaier[7999],"-5571575643265909E-99", strlen("-5571575643265909E-9
                 // sending all multiplicand multiple and getting product
                 doAccummul  (product,MM, 10);
 	        method3_end = read_cycles();
-		printf("Took %lu cycles to X=%ld, Y=%ld, Method-3  \n",method3_end - method3_start ,X_64,Y_64);
+		printf("Took %lu cycles to X=%ld, Y=%ld, Method-3(old) New method-2  \n",method3_end - method3_start ,X_64,Y_64);
 
   	}// method-3 end 
 
  
 
- //method 2 start
+ //method 2(old) start
  //generation of multiplicand multiple 
 
 
   for (int method_2 = 1; method_2<5; method_2++)
         {
-                method2_start = read_cycles();
-                unsigned long long MM[10];
+                              unsigned long long MM[10];
                 MM[0]= 0b000000000000000000000000000000000000000000000000000000000000000;
                 MM[1]= X_64;
                 MM[2]= X_64;
@@ -16386,12 +16385,17 @@ strncpy (multiplaier[7999],"-5571575643265909E-99", strlen("-5571575643265909E-9
  		MM[8]= X_64;
  		MM[9]= X_64;
 
+                method2_start = read_cycles();
+
+
 		 __uint128_t product=0;
+
+
 
                 // sending all multiplicand multiple and getting product
                 doAccummul  (product,MM, 10);
                 method2_end = read_cycles();
-                printf("Took %lu cycles to X=%ld, Y=%ld, Method-2  \n",method2_end - method2_start ,X_64,Y_64);
+                printf("Took %lu cycles to X=%ld, Y=%ld, Method-2(old)  \n",method2_end - method2_start ,X_64,Y_64);
 
         }// 
 
@@ -16420,7 +16424,7 @@ strncpy (multiplaier[7999],"-5571575643265909E-99", strlen("-5571575643265909E-9
 
 
 
-  
+  //myend
 
  
  

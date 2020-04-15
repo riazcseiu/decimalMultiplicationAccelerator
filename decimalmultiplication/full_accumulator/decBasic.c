@@ -50,7 +50,7 @@
 #define LAST(k,n) ((k) & ((1<<(n))-1))
 #define MID(k,m,n) LAST((k)>>(m),((n)-(m)))
 
-
+#include"decDouble.h" 
 
 /* Private functions (local, used only by routines in this module) */
 static decFloat *decDivide(decFloat *, const decFloat *,
@@ -1186,7 +1186,7 @@ static void decFiniteMultiply(bcdnum *num, uByte *bcdacc,
 ////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
 //to test method 4 we need to modify original function 	decFiniteMultiply	 
-	  int methodnumber =5;        //4 = Method-1 : BCD conversion Method-1
+	  int methodnumber =1;        //4 = Method-1 : BCD conversion Method-1
                                    //1 = Method-2 calculating 1X-9X in base billion
                                    //5 = Method-3 
 							      //2 = using base thousand addition New Method
@@ -1196,10 +1196,14 @@ static void decFiniteMultiply(bcdnum *num, uByte *bcdacc,
 		 // methodnumber = 1;//2 ;//3;
 
 		  switch (methodnumber) {
-		  case 1:
-		  {
+		  
 
-			  uInt sourhi, sourlo;                             \
+ case 1:
+		  {
+  		    unsigned long long MM[10];
+                     MM[0]= 0b000000000000000000000000000000000000000000000000000000000000000;
+
+			          uInt sourhi, sourlo;                             \
 				  sourlo = DFWORD(dfl, 1);                          \
 				  (bufl)[0] = DPD2BIN0[sourlo & 0x3ff]              \
 				  + DPD2BINK[(sourlo >> 10) & 0x3ff]                \
@@ -1209,6 +1213,8 @@ static void decFiniteMultiply(bcdnum *num, uByte *bcdacc,
 				  + DPD2BINK[(sourhi >> 7) & 0x3ff]                    \
 				  + DPD2BINM[DECCOMBMSD[sourhi >> 26]];
 			      // start the 64-bit/32-bit differing paths...
+                              MM[1]= sourhi;
+
 
 
 			  for (int precomputei = 2; precomputei < 10; precomputei++) // 1-9X need to comment out BCD conversion part
@@ -1263,13 +1269,34 @@ static void decFiniteMultiply(bcdnum *num, uByte *bcdacc,
 					  else {                             // *pl<MULTBASE
 						  *pa = (uInt)*pl;                    // just copy across
 					  }
+
+                                        MM[precomputei]=pa;
 				  } // pl loop
 				  ///////////////////////////////////////////////////////////////////
 				  ///////////////////////////////case 1 end///////////////////////////////////////////////
 					  
 			  }
+
+
+
+													
+		    //    __uint128_t product=0;
+  hw_method1_start   = read_cycles();
+__uint128_t product=0;
+
+	
+			doAccummul(product, MM,10);
 			  // printf("This is binary multiplication \n");
+
+
+
+	
+                hw_method1_end   = read_cycles();
+
+                total_cycle_hw_method = hw_method1_end  - hw_method1_start ;
+
 		  }
+
 		  break;
 		  case 2:
 		  {
@@ -1351,13 +1378,34 @@ for (int mm=0; mm<8; mm++)
         { 
 	int a=3+3;
         }
-
+ 
 */
-      // unsigned long M1Result = doAccummul(sourhi,  soullo,10);
-     
+ 
+
+                                 unsigned long long MM[10];
+                MM[0]= 0b000000000000000000000000000000000000000000000000000000000000000;
+                MM[1]= soulhi;
+                for (int mulcount = 1; mulcount<9 ; mulcount=mulcount+1)
+                        doBCD(MM[mulcount+1],MM[1], MM[mulcount]);
+                __uint128_t product=0;
+                hw_method1_start   = read_cycles();
 
 
+        for (int ii=0; ii <36 ; ii=ii+4)
+                {
+                        //printf("initial porduct is %lu and the digit is%x \n",product, MID(Y_64,ii,ii+4));
+                        doBCD(product,product , MM[ MID(soulhi,ii,ii+4)]);
+                        //printf ("steps=%d,product=%llu ,digit of Y=%x X= %lu   \
+                        Y= %lu \n",ii,product,  MID(Y_64,ii,ii+4), X_64,Y_64);
+                        product << 4;
+                }
 
+               // method1_end = read_cycles();
+               //printf("Took %lu cycles to X=%ld, Y=%ld, Method-1  \n",method1_end - method1_start ,X_64,Y_64);
+	
+                hw_method1_end   = read_cycles();
+
+                total_cycle_hw_method = hw_method1_end  - hw_method1_start ;
 }
         break;
         case 5:
@@ -1399,18 +1447,21 @@ for (int mm=0; mm<8; mm++)
                 unsigned long long MM[10];
                 MM[0]= 0b000000000000000000000000000000000000000000000000000000000000000;
                 MM[1]= soulhi;
+
+
+ 		hw_method1_start   = read_cycles();
+
                 for (int mulcount = 1; mulcount<9 ; mulcount=mulcount+1)
                         doBCD(MM[mulcount+1],MM[1], MM[mulcount]);
                 __uint128_t product=0;
 
-        for (int ii=0; ii <36 ; ii=ii+4)
-                {
-                        //printf("initial porduct is %lu and the digit is%x \n",product, MID(Y_64,ii,ii+4));
-                        doBCD(product,product , MM[ MID(soulhi,ii,ii+4)]);
-                        //printf ("steps=%d,product=%llu ,digit of Y=%x X= %lu   \
-                        Y= %lu \n",ii,product,  MID(Y_64,ii,ii+4), X_64,Y_64);
-                        product << 4;
-                }
+		// unsigned long M1Result = doAccummul(sourhi,  soullo,10);
+		doAccummul(sourhi,  soullo,10);
+
+  		hw_method1_end   = read_cycles();
+
+                total_cycle_hw_method = hw_method1_end  - hw_method1_start ;
+
 
                // method1_end = read_cycles();
                //printf("Took %lu cycles to X=%ld, Y=%ld, Method-1  \n",method1_end - method1_start ,X_64,Y_64);
@@ -3203,7 +3254,7 @@ decFloat * decFloatMultiply(decFloat *result,
   
 
   //only form test of method-4 , in that case decFinalize(result, &num, set); must need to comment out
- // return decInfinity(result, result);
+  // return decInfinity(result, result);
   
 
   return decFinalize(result, &num, set); // round, check, and lay out
