@@ -5,15 +5,25 @@
 
 #include "rocc-software/src/xcustom.h"
 
+
+ unsigned long hw_method1_start, 
+                     hw_method1_end;
+
+
+ unsigned long total_cycle_hw_method;
+
+
+
+
+
+
 #define k_DO_WRITE 0
 #define k_DO_READ 1
 #define k_DO_LOAD 2
 #define k_DO_ACCUM 3
 #define k_DO_BCD 4
 #define k_DO_CONVERT 6
-#define k_DO_ACCMUL 7
-
-
+#define k_DO_ACCMUL 11
 
 #define XCUSTOM_ACC 0
 
